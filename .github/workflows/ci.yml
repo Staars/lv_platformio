@@ -18,7 +18,15 @@ jobs:
 
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
-        
+
+      - name: Cache PlaformIO downloads
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.plaformio
+          key: ${{ runner.os }}-pio-${{ hashFiles('**/*') }}
+          restore-keys: ${{ runner.os }}-pio-
+
       - name: Install PlatformIO
         run: |
           python -m pip install --upgrade pip
@@ -31,6 +39,11 @@ jobs:
       - name: Build native (sdl2)
         run: platformio run -e native
 
+      - name: test cache content
+        run: |
+          ls ~/.platformio/.cache
+          ls ~/.platformio
+
   macOS:
     runs-on: macos-latest
     steps:
@@ -40,7 +53,15 @@ jobs:
 
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
-        
+
+      - name: Cache PlaformIO downloads
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.plaformio
+          key: ${{ runner.os }}-pio-${{ hashFiles('**/*') }}
+          restore-keys: ${{ runner.os }}-pio-
+
       - name: Install PlatformIO
         run: |
           python -m pip install --upgrade pip
@@ -67,7 +88,7 @@ jobs:
           gcc --version
 
       - uses: actions/checkout@v2
-      #- uses: actions/setup-python@v1
+      - uses: actions/setup-python@v1
 
       - name: Install PlatformIO
         run: |
